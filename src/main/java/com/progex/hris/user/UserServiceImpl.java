@@ -15,7 +15,8 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+	@Autowired
+	private RoleRepository roleRepository;
 
 	public List<User> getAllUsers() {
 		List<User> users = new ArrayList<User>();
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public void addUser(User user) {
-		user.setpWord(new BCryptPasswordEncoder().encode(user.getpWord()));
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		userRepository.save(user);
 	}
 
@@ -42,5 +43,26 @@ public class UserServiceImpl implements UserService {
 
 	public User getUserByUserName(String uName) {
 		return userRepository.findByUserName(uName);
+	}
+
+	public Role addRole(Role role) {
+		return roleRepository.save(role);
+	}
+
+	public Role updateRole(Role role) {
+		return roleRepository.save(role);
+	}
+
+	public Role getRole(short id) {
+		return roleRepository.findOne(id);
+	}
+
+	public void deleteRole(short id) {
+		roleRepository.delete(id);
+	}
+
+	public Role getRoleByType(Role.Type type) {
+		return roleRepository.findByType(type);
+
 	}
 }

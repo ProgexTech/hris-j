@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,14 +16,24 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	@OneToOne
+	private Role role;
 	private String userName;
-	private String pWord;
+	private String password;
 	private String firstName;
 	private String lastName;
 	private String nic;
 	private String address;
 	private String email;
 	private Date dob;
+	
+	public Role getRole() {
+		return role;
+	}
+	
+	public void setRole(Role role) {
+		this.role = role;
+	}
 	
 	public Date getDob() {
 		return dob;
@@ -80,11 +91,11 @@ public class User {
 	public void setFirstName(String name) {
 		this.firstName = name;
 	}
-	public String getpWord() {
-		return pWord;
+	public String getPassword() {
+		return password;
 	}
-	public void setpWord(String pWord) {
-		this.pWord = pWord;
+	public void setPassword(String pWord) {
+		this.password = pWord;
 	}
 	public String getAddress() {
 		return address;
@@ -95,6 +106,9 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userName=" + userName + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		return "User [id=" + id + ", role=" + role + ", userName=" + userName + ", password=" + password
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", nic=" + nic + ", address=" + address
+				+ ", email=" + email + ", dob=" + dob + "]";
 	}
+
 }
