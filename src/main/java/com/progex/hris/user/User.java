@@ -1,7 +1,12 @@
 package com.progex.hris.user;
 
 import java.sql.Date;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,8 +21,6 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	@OneToOne
-	private Role role;
 	private String userName;
 	private String password;
 	private String firstName;
@@ -26,15 +29,27 @@ public class User {
 	private String address;
 	private String email;
 	private Date dob;
+	private boolean active;
 	
+	@OneToOne
+	private Role role;
+
+	@ElementCollection
+	@CollectionTable(name = "Designation")
+	private List<Designation> designations;
+
+	@ElementCollection
+	@CollectionTable(name = "Contacts")
+	private List<ContactNumber> contacts;
+
 	public Role getRole() {
 		return role;
 	}
-	
+
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
+
 	public Date getDob() {
 		return dob;
 	}
@@ -52,63 +67,101 @@ public class User {
 	}
 
 	public User() {
-		
+
 	}
-	
-	public User(long id, String name){
+
+	public User(long id, String name) {
 		super();
 		this.firstName = name;
 		this.id = id;
 	}
-	
+
 	public String getUserName() {
 		return userName;
 	}
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	public String getNic() {
 		return nic;
 	}
+
 	public void setNic(String nic) {
 		this.nic = nic;
 	}
+
 	public long getId() {
 		return id;
 	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public void setFirstName(String name) {
 		this.firstName = name;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String pWord) {
 		this.password = pWord;
 	}
+
 	public String getAddress() {
 		return address;
 	}
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
 
+	public void setDesignations(List<Designation> designations) {
+		this.designations = designations;
+	}
+
+	public List<Designation> getDesignations() {
+		return designations;
+	}
+
+	public List<ContactNumber> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(List<ContactNumber> contacts) {
+		this.contacts = contacts;
+	}
+
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", role=" + role + ", userName=" + userName + ", password=" + password
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", nic=" + nic + ", address=" + address
-				+ ", email=" + email + ", dob=" + dob + "]";
+		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", nic=" + nic + ", address=" + address + ", email=" + email + ", dob="
+				+ dob + ", active=" + active + ", role=" + role + ", designations=" + designations + ", contacts="
+				+ contacts + "]";
 	}
 
 }

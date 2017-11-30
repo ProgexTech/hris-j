@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "role")
+@Table(name = "Role")
 public class Role {
 
 	enum Type {
@@ -22,6 +22,7 @@ public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private short id;
+	
 	@Enumerated(EnumType.ORDINAL)
 	@Column(unique=true)
 	private Type type;
