@@ -14,19 +14,17 @@ import javax.persistence.Table;
 public class Role {
 
 	enum Type {
-		ADMIN,
-		MANAGER,
-		USER
+		ADMIN, MANAGER, USER
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private short id;
-	
+
 	@Enumerated(EnumType.ORDINAL)
-	@Column(unique=true)
+	@Column(unique = true)
 	private Type type;
-	
+
 	public short getId() {
 		return id;
 	}
@@ -34,7 +32,6 @@ public class Role {
 	public void setId(short id) {
 		this.id = id;
 	}
-
 
 	public Type getType() {
 		return type;

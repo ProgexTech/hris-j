@@ -29,8 +29,8 @@ public class User {
 	private String address;
 	private String email;
 	private Date dob;
-	private boolean active;
-	
+	private Boolean active;
+
 	@OneToOne
 	private Role role;
 
@@ -39,7 +39,7 @@ public class User {
 	private List<Designation> designations;
 
 	@ElementCollection
-	@CollectionTable(name = "Contacts")
+	@CollectionTable(name = "Contact")
 	private List<ContactNumber> contacts;
 
 	public Role getRole() {
@@ -70,10 +70,23 @@ public class User {
 
 	}
 
-	public User(long id, String name) {
+	public User(long id, String userName, String password, String firstName, String lastName, String nic,
+			String address, String email, Date dob, Boolean active, Role role, List<Designation> designations,
+			List<ContactNumber> contacts) {
 		super();
-		this.firstName = name;
 		this.id = id;
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.nic = nic;
+		this.address = address;
+		this.email = email;
+		this.dob = dob;
+		this.active = active;
+		this.role = role;
+		this.designations = designations;
+		this.contacts = contacts;
 	}
 
 	public String getUserName() {
@@ -148,11 +161,11 @@ public class User {
 		this.contacts = contacts;
 	}
 
-	public boolean getActive() {
+	public Boolean getActive() {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 

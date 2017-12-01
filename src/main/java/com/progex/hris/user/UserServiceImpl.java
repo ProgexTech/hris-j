@@ -34,6 +34,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public void updateUser(long id, User user) {
+		if (user.getPassword() != null)
+			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		userRepository.save(user);
 	}
 
@@ -64,5 +66,46 @@ public class UserServiceImpl implements UserService {
 	public Role getRoleByType(Role.Type type) {
 		return roleRepository.findByType(type);
 
+	}
+
+	public void patchUser(long id, User user) {
+		User oldUser = userRepository.findOne(id);
+		if (user.getAddress() != null) {
+			oldUser.setAddress(user.getAddress());
+		}
+		if (user.getContacts() != null) {
+			oldUser.setContacts(user.getContacts());
+		}
+		if (user.getDesignations() != null) {
+			oldUser.setDesignations(user.getDesignations());
+		}
+		if (user.getEmail() != null) {
+			oldUser.setEmail(user.getEmail());
+		}
+		if (user.getDob() != null) {
+			oldUser.setDob(user.getDob());
+		}
+		if (user.getFirstName() != null) {
+			oldUser.setFirstName(user.getFirstName());
+		}
+		if (user.getLastName() != null) {
+			oldUser.setLastName(user.getLastName());
+		}
+		if (user.getRole() != null) {
+			oldUser.setRole(user.getRole());
+		}
+		if (user.getNic() != null) {
+			oldUser.setNic(user.getNic());
+		}
+		if (user.getPassword() != null) {
+			oldUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+		}
+		if (user.getUserName() != null) {
+			oldUser.setUserName(user.getUserName());
+		}
+		if (user.getActive() != null) {
+			oldUser.setActive(user.getActive());
+		}
+		userRepository.save(oldUser);
 	}
 }
