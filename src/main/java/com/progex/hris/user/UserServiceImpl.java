@@ -9,7 +9,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.progex.hris.user.*;
-
+/**
+ * UserServiceImpl User related core functionalities will be handled in this class
+ * 
+ * @author indunil.moremada
+ */
 @Component
 public class UserServiceImpl implements UserService {
 
@@ -28,9 +32,9 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findOne(id);
 	}
 
-	public void addUser(User user) {
+	public User addUser(User user) {
 		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-		userRepository.save(user);
+		return userRepository.save(user);
 	}
 
 	public void updateUser(long id, User user) {
