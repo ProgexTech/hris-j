@@ -32,4 +32,12 @@ public class UserLeaveService {
 		return userLeaveRepository.findOne(id);
 	}
 	
+	public void addUserLeave(UserLeave userLeave) {
+		userLeaveRepository.save(userLeave);
+	}
+	
+	public void updateUserLeave(long id, UserLeave userLeave) {
+		userLeaveRepository.save(userLeave);
+	}
+	
 }
