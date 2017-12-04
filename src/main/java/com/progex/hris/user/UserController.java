@@ -1,23 +1,16 @@
 package com.progex.hris.user;
 
-import java.lang.invoke.MethodType;
 import java.util.List;
-import java.util.Map;
-
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.progex.hris.user.*;
 
 /**
  * UserController Rest Controller to manipulate user related stuff
@@ -42,7 +35,7 @@ public class UserController {
 	public ResponseEntity<List<User>> geAlltUsers() {
 		List<User> users = userService.getAllUsers();
 		if (users.isEmpty()) {
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
 		}
 		if(logger.isInfoEnabled())
 			logger.info("Returning all the User´s");
@@ -66,9 +59,9 @@ public class UserController {
 		User user = userService.getUser(id);
 		if (user == null) {
 			logger.warn("User with the id "+id+" not found in the database");
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity(user, HttpStatus.OK);
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
 	/**
@@ -88,7 +81,7 @@ public class UserController {
 		Role existingRole = userService.getRole(user.getRole().getId());
 		if (existingRole == null) {
 			logger.warn("Invalid Role cannot proceed to save user id "+ user.getId());
-			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<User>(userService.addUser(user), HttpStatus.CREATED);
 	}
@@ -154,23 +147,23 @@ public class UserController {
 	 * @return {@link ResponseEntity}
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/roles")
-	public ResponseEntity<User> addRole(@RequestBody Role role) {
+	public ResponseEntity<Role> addRole(@RequestBody Role role) {
 		if(logger.isInfoEnabled())
 			logger.info("Role to save " + role);
 		
 		Role roleWithType = userService.getRoleByType(role.getType());
 		if (roleWithType != null) {
 			logger.error("Given role is already existed in the database");
-			return new ResponseEntity(roleWithType, HttpStatus.CONFLICT);
+			return new ResponseEntity<Role>(roleWithType, HttpStatus.CONFLICT);
 		}
 		Role savedRole = userService.addRole(role);
 		if (savedRole == null) {
 			logger.error("Role cannot be saved. Something went wrong while saving");
-			return new ResponseEntity(HttpStatus.METHOD_FAILURE);
+			return new ResponseEntity<Role>(HttpStatus.BAD_REQUEST);
 		}
 		if(logger.isInfoEnabled())
 			logger.info("Role has been successfully saved " + role);
-		return new ResponseEntity(savedRole, HttpStatus.OK);
+		return new ResponseEntity<Role>(savedRole, HttpStatus.OK);
 	}
 
 	/**

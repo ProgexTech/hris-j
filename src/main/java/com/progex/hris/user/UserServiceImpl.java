@@ -1,14 +1,12 @@
 package com.progex.hris.user;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.progex.hris.user.*;
 /**
  * UserServiceImpl User related core functionalities will be handled in this class
  * 

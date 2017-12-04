@@ -1,9 +1,7 @@
 package com.progex.hris.user;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
 
 public interface UserService {
 	
