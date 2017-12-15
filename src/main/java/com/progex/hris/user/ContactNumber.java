@@ -15,6 +15,16 @@ public class ContactNumber {
 	private PhoneType type;
 	private String number;
 	
+	public ContactNumber() {
+		
+	}
+	
+	public ContactNumber(PhoneType type, String number) {
+		super();
+		this.type = type;
+		this.number = number;
+	}
+	
 	public PhoneType getType() {
 		return type;
 	}

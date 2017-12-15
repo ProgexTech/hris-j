@@ -1,22 +1,34 @@
 package com.progex.hris.user;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-@Embeddable
-@Access(AccessType.FIELD)
+@Entity
 @Table(name = "Designation")
 public class Designation {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Short id;
 	private String title;
 	private Date fromDate;
 	private Date toDate;
 	private boolean fullTime;
 	private String description;
+	
+	@ManyToMany(mappedBy = "designation")
+	private List<User> user;
+	
+	public Designation() {
+		
+	}
 
 	public String getTitle() {
 		return title;
@@ -58,10 +70,27 @@ public class Designation {
 		this.description = description;
 	}
 
-	@Override
-	public String toString() {
-		return "Designation [title=" + title + ", fromDate=" + fromDate + ", toDate=" + toDate + ", fullTime="
-				+ fullTime + ", description=" + description + "]";
+	public List<User> getUser() {
+		return user;
 	}
 
+	public void setUser(List<User> user) {
+		this.user = user;
+	}
+
+	public Short getId() {
+		return id;
+	}
+
+	public void setId(Short id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Designation [id=" + id + ", title=" + title + ", fromDate=" + fromDate + ", toDate=" + toDate
+				+ ", fullTime=" + fullTime + ", description=" + description + ", user=" + user + "]";
+	}
+
+	
 }

@@ -1,16 +1,25 @@
 package com.progex.hris.user;
 
-import java.sql.Date;
-import java.util.List;
+import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+
+import com.progex.hris.user.authorization.Role;
 
 @Entity
 @Table(name = "User")
@@ -19,26 +28,42 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
+	@NotNull
 	private String userName;
+	
+	@NotNull
 	private String password;
+	
+	@NotNull
 	private String firstName;
+	
 	private String lastName;
+	
 	private String nic;
+	
 	private String address;
+	
 	private String email;
+	
+	@NotNull
+	@Temporal(TemporalType.DATE)
 	private Date dob;
+	
+	@NotNull
 	private Boolean active;
 
 	@ManyToOne
 	private Role role;
 
-	@ElementCollection
-	@CollectionTable(name = "Designation")
-	private List<Designation> designations;
+	@ManyToMany(cascade=CascadeType.PERSIST)
+	@JoinTable(name = "user_designation_history")
+	private Set<Designation> designation;
 
+	@NotNull
 	@ElementCollection
 	@CollectionTable(name = "Contact")
-	private List<ContactNumber> contacts;
+	private Set<ContactNumber> contacts;
 
 	public Role getRole() {
 		return role;
@@ -69,8 +94,8 @@ public class User {
 	}
 
 	public User(long id, String userName, String password, String firstName, String lastName, String nic,
-			String address, String email, Date dob, Boolean active, Role role, List<Designation> designations,
-			List<ContactNumber> contacts) {
+			String address, String email, Date dob, Boolean active, Role role, Set<Designation> designation,
+			Set<ContactNumber> contacts) {
 		super();
 		this.id = id;
 		this.userName = userName;
@@ -83,7 +108,7 @@ public class User {
 		this.dob = dob;
 		this.active = active;
 		this.role = role;
-		this.designations = designations;
+		this.designation = designation;
 		this.contacts = contacts;
 	}
 
@@ -143,19 +168,19 @@ public class User {
 		this.address = address;
 	}
 
-	public void setDesignations(List<Designation> designations) {
-		this.designations = designations;
+	public void setDesignation(Set<Designation> designation) {
+		this.designation = designation;
 	}
 
-	public List<Designation> getDesignations() {
-		return designations;
+	public Set<Designation> getDesignation() {
+		return designation;
 	}
 
-	public List<ContactNumber> getContacts() {
+	public Set<ContactNumber> getContacts() {
 		return contacts;
 	}
 
-	public void setContacts(List<ContactNumber> contacts) {
+	public void setContacts(Set<ContactNumber> contacts) {
 		this.contacts = contacts;
 	}
 
@@ -171,7 +196,7 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", nic=" + nic + ", address=" + address + ", email=" + email + ", dob="
-				+ dob + ", active=" + active + ", role=" + role + ", designations=" + designations + ", contacts="
+				+ dob + ", active=" + active + ", role=" + role + ", designation=" + designation + ", contacts="
 				+ contacts + "]";
 	}
 

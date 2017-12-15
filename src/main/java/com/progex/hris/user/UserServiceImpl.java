@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.progex.hris.user.authorization.Role;
+import com.progex.hris.user.authorization.RoleRepository;
+
 /**
  * UserServiceImpl User related core functionalities will be handled in this class
  * 
@@ -65,10 +68,10 @@ public class UserServiceImpl implements UserService {
 		roleRepository.delete(id);
 	}
 
-	public Role getRoleByType(Role.Type type) {
-		return roleRepository.findByType(type);
-
-	}
+//	public Role getRoleByType(Role.Type type) {
+//		return roleRepository.findByType(type);
+//
+//	}
 
 	public void patchUser(long id, User user) {
 		User oldUser = userRepository.findOne(id);
@@ -78,8 +81,8 @@ public class UserServiceImpl implements UserService {
 		if (user.getContacts() != null) {
 			oldUser.setContacts(user.getContacts());
 		}
-		if (user.getDesignations() != null) {
-			oldUser.setDesignations(user.getDesignations());
+		if (user.getDesignation() != null) {
+			oldUser.setDesignation(user.getDesignation());
 		}
 		if (user.getEmail() != null) {
 			oldUser.setEmail(user.getEmail());

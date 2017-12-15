@@ -6,11 +6,17 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.progex.hris.user.authorization.Role;
 
 /**
  * UserController Rest Controller to manipulate user related stuff
@@ -27,11 +33,11 @@ public class UserController {
 	private UserServiceImpl userService;
 
 	/**
-	 * Returns all the users in the database.
+	 * Returns <p>all the users in the database.</p>
 	 * 
 	 * @return {@link ResponseEntity}
 	 */
-	@RequestMapping("/users")
+	@GetMapping("/users")
 	public ResponseEntity<List<User>> geAlltUsers() {
 		List<User> users = userService.getAllUsers();
 		if (users.isEmpty()) {
@@ -49,9 +55,9 @@ public class UserController {
 	 * @param id
 	 * 
 	 * 
-	 * @return {@link ResponseEntity}
+	 * @return <p> Returns <tt>ResponseEntity<User> </tt> {@link ResponseEntity}</p>
 	 */
-	@RequestMapping("/user/{id}")
+	@GetMapping("/user/{id}")
 	public ResponseEntity<User> getUser(@PathVariable long id) {
 		if(logger.isInfoEnabled())
 			logger.info("User id to return "+id);
@@ -65,15 +71,14 @@ public class UserController {
 	}
 
 	/**
-	 * Inserts the given user to the database. All the mandatory fields must be
-	 * included to the user object
+	 * <p> Inserts the given user to the database. All the mandatory fields must be
+	 * included to the user object</p>
 	 * 
-	 * @param user
-	 *            {@link User}
+	 * @param <p> <tt> User </tt> {@link User} </p>
 	 * @return {@link ResponseEntity}
 	 * 
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/users")
+	@PostMapping("/users")
 	public ResponseEntity<User> addUser(@RequestBody User user) {
 		if(logger.isInfoEnabled())
 			logger.info("User to save " + user);
@@ -95,7 +100,7 @@ public class UserController {
 	 * @return {@link ResponseEntity}
 	 * 
 	 */
-	@RequestMapping(method = RequestMethod.PUT, value = "/users/{id}")
+	@PutMapping("/users/{id}")
 	public void updateUser(@RequestBody User user, @PathVariable long id) {
 		if(logger.isInfoEnabled())
 			logger.info("User to update " + user);
@@ -114,7 +119,7 @@ public class UserController {
 	 * @return {@link ResponseEntity}
 	 * 
 	 */
-	@RequestMapping(method = RequestMethod.PATCH, value = "/users/{id}")
+	@PatchMapping("/users/{id}")
 	public void patchUser(@RequestBody User user, @PathVariable long id) {
 		if(logger.isInfoEnabled())
 			logger.info("User to partially update " + user);
@@ -130,7 +135,7 @@ public class UserController {
 	 * @return {@link ResponseEntity}
 	 * 
 	 */
-	@RequestMapping(method = RequestMethod.DELETE, value = "users/{id}")
+	@DeleteMapping("users/{id}")
 	public void deleteUser(@PathVariable long id) {
 		if(logger.isInfoEnabled())
 			logger.info("Removing user id = " + id);
@@ -138,46 +143,4 @@ public class UserController {
 		userService.deleteUser(id);
 	}
 
-	/**
-	 * Inserts new Role to the database
-	 * 
-	 * @param role
-	 *            {@link Role}
-	 * 
-	 * @return {@link ResponseEntity}
-	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/roles")
-	public ResponseEntity<Role> addRole(@RequestBody Role role) {
-		if(logger.isInfoEnabled())
-			logger.info("Role to save " + role);
-		
-		Role roleWithType = userService.getRoleByType(role.getType());
-		if (roleWithType != null) {
-			logger.error("Given role is already existed in the database");
-			return new ResponseEntity<Role>(roleWithType, HttpStatus.CONFLICT);
-		}
-		Role savedRole = userService.addRole(role);
-		if (savedRole == null) {
-			logger.error("Role cannot be saved. Something went wrong while saving");
-			return new ResponseEntity<Role>(HttpStatus.BAD_REQUEST);
-		}
-		if(logger.isInfoEnabled())
-			logger.info("Role has been successfully saved " + role);
-		return new ResponseEntity<Role>(savedRole, HttpStatus.OK);
-	}
-
-	/**
-	 * Deletes Role with the given id from the database
-	 * 
-	 * @param id
-	 * 
-	 * @return {@link ResponseEntity}
-	 */
-	@RequestMapping(method = RequestMethod.DELETE, value = "/roles/{id}")
-	public void deleteRole(@PathVariable short id) {
-		if(logger.isInfoEnabled())
-			logger.info("To be removed Role id = " + id);
-		
-		userService.deleteRole(id);
-	}
 }
