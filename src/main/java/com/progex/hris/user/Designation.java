@@ -1,7 +1,7 @@
 package com.progex.hris.user;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Designation")
@@ -24,7 +26,7 @@ public class Designation {
 	private String description;
 	
 	@ManyToMany(mappedBy = "designation")
-	private List<User> user;
+	private Set<User> user;
 	
 	public Designation() {
 		
@@ -70,11 +72,12 @@ public class Designation {
 		this.description = description;
 	}
 
-	public List<User> getUser() {
+	@JsonIgnore
+	public Set<User> getUser() {
 		return user;
 	}
 
-	public void setUser(List<User> user) {
+	public void setUser(Set<User> user) {
 		this.user = user;
 	}
 

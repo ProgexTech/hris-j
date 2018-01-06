@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,5 +70,16 @@ public class RoleController {
 			logger.info("To be removed Role id = " + id);
 		
 		roleServiceImpl.deleteRole(id);
+	}
+	
+	/**
+	 * Returns Role with the given id
+	 * @param id
+	 */
+	@GetMapping("/roles/{id}")
+	public ResponseEntity<Role> getRoleById(@PathVariable short id){
+		if(logger.isInfoEnabled())
+			logger.info("Retrieving Role id = " + id);
+		return new ResponseEntity<Role>(roleServiceImpl.getRole(id),HttpStatus.OK);
 	}
 }

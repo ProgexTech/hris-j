@@ -16,4 +16,6 @@ public interface UserService {
 	public void deleteUser(long id);
 
 	public User getUserByUserName(String uName);
+	
+	public List<User> getAllUsersBySupervisorId(long id);
 }

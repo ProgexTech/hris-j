@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
-
+	
 	public List<User> getAllUsers() {
 		List<User> users = new ArrayList<User>();
 		userRepository.findAll().forEach(users::add);
@@ -52,26 +52,9 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByUserName(uName);
 	}
 
-	public Role addRole(Role role) {
-		return roleRepository.save(role);
-	}
-
-	public Role updateRole(Role role) {
-		return roleRepository.save(role);
-	}
-
 	public Role getRole(short id) {
 		return roleRepository.findOne(id);
 	}
-
-	public void deleteRole(short id) {
-		roleRepository.delete(id);
-	}
-
-//	public Role getRoleByType(Role.Type type) {
-//		return roleRepository.findByType(type);
-//
-//	}
 
 	public void patchUser(long id, User user) {
 		User oldUser = userRepository.findOne(id);
@@ -111,6 +94,16 @@ public class UserServiceImpl implements UserService {
 		if (user.getActive() != null) {
 			oldUser.setActive(user.getActive());
 		}
+		if(user.getSupervisorId() != null) {
+			oldUser.setSupervisorId(user.getSupervisorId());
+		}
 		userRepository.save(oldUser);
+	}
+
+	@Override
+	public List<User> getAllUsersBySupervisorId(long id) {
+		List<User> userList = new ArrayList<User>();
+		userRepository.findAllUsersBySupervisorId(id).forEach(userList::add);
+		return userList;
 	}
 }
