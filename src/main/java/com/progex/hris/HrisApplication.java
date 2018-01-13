@@ -23,7 +23,7 @@ public class HrisApplication {
 	            public void addCorsMappings(CorsRegistry registry) {
 	            	registry.addMapping("/api/**")
 	        		.allowedOrigins("http://localhost:4200")
-	        		.allowedMethods("PUT", "DELETE", "GET", "PATCH")
+	        		.allowedMethods("PUT", "POST", "DELETE", "GET", "PATCH")
 	        		.allowedHeaders("*")
 	        		.allowCredentials(false).maxAge(3600);
 	            }
