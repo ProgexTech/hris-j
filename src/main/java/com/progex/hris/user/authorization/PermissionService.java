@@ -1,5 +1,6 @@
 package com.progex.hris.user.authorization;
 
+import java.util.Set;
 
 public interface PermissionService {
 
@@ -10,4 +11,6 @@ public interface PermissionService {
 	public Permission updatePermission(Permission perm);
 	
 	public Permission getPermissionById(short id);
+	
+	public Set<Permission> getAllPermissions();
 }

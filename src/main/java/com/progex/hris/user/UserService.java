@@ -18,4 +18,6 @@ public interface UserService {
 	public User getUserByUserName(String uName);
 	
 	public List<User> getAllUsersBySupervisorId(long id);
+
+	public void patchUser(long id, User user);
 }

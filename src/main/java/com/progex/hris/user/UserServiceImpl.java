@@ -79,9 +79,9 @@ public class UserServiceImpl implements UserService {
 		if (user.getLastName() != null) {
 			oldUser.setLastName(user.getLastName());
 		}
-		if (user.getRole() != null) {
-			oldUser.setRole(user.getRole());
-		}
+//		if (user.getRole() != null) {
+//			oldUser.setRole(user.getRole());
+//		}
 		if (user.getNic() != null) {
 			oldUser.setNic(user.getNic());
 		}

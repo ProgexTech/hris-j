@@ -13,14 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-
-import com.progex.hris.user.authorization.Role;
 
 @Entity
 @Table(name = "User")
@@ -56,9 +53,6 @@ public class User {
 	@NotNull
 	private Boolean active;
 
-	@ManyToOne
-	private Role role;
-
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "user_designation_history")
 	private Set<Designation> designation;
@@ -70,14 +64,6 @@ public class User {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, mappedBy = "user")
 	private Set<UserDepartment> userDepartment;
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
 
 	public Date getDob() {
 		return dob;
@@ -97,27 +83,6 @@ public class User {
 
 	public User() {
 
-	}
-
-	public User(long id, String userName, String password, String firstName, String lastName, String nic,
-			String address, String email, Long supervisorId, Date dob, Boolean active, Role role,
-			Set<Designation> designation, Set<ContactNumber> contacts, Set<UserDepartment> userDepartment) {
-		super();
-		this.id = id;
-		this.userName = userName;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.nic = nic;
-		this.address = address;
-		this.email = email;
-		this.supervisorId = supervisorId;
-		this.dob = dob;
-		this.active = active;
-		this.role = role;
-		this.designation = designation;
-		this.contacts = contacts;
-		this.userDepartment = userDepartment;
 	}
 
 	public String getUserName() {
@@ -215,14 +180,4 @@ public class User {
 	public void setUserDepartment(Set<UserDepartment> department) {
 		this.userDepartment = department;
 	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", nic=" + nic + ", address=" + address + ", email=" + email
-				+ ", supervisorId=" + supervisorId + ", dob=" + dob + ", active=" + active + ", role=" + role
-				+ ", designation=" + designation + ", contacts=" + contacts + ", userDepartment=" + userDepartment
-				+ "]";
-	}
-
 }

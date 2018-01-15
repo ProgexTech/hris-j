@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.progex.hris.organization.Department;
-import com.progex.hris.organization.DepartmentServiceImpl;
+import com.progex.hris.organization.DepartmentService;
 import com.progex.hris.user.authorization.Role;
+import com.progex.hris.user.authorization.RoleService;
 
 /**
  * UserController Rest Controller to manipulate user related stuff
@@ -32,13 +33,19 @@ public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
-	private UserServiceImpl userService;
+	private UserService userService;
 
 	@Autowired
-	private UserDepartmentServiceImpl userDeprtmentService;
+	private UserDepartmentService userDeprtmentService;
 
 	@Autowired
-	private DepartmentServiceImpl departmentService;
+	private DepartmentService departmentService;
+
+	@Autowired
+	private UserRoleService userRoleService;
+
+	@Autowired
+	private RoleService roleService;
 
 	/**
 	 * Returns
@@ -101,11 +108,11 @@ public class UserController {
 		if (logger.isInfoEnabled())
 			logger.info("User to save " + user);
 
-		Role existingRole = userService.getRole(user.getRole().getId());
-		if (existingRole == null) {
-			logger.warn("Invalid Role cannot proceed to save user id " + user.getId());
-			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-		}
+		// Role existingRole = userService.getRole(user.getRole().getId());
+		// if (existingRole == null) {
+		// logger.warn("Invalid Role cannot proceed to save user id " + user.getId());
+		// return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		// }
 		return new ResponseEntity<User>(userService.addUser(user), HttpStatus.CREATED);
 	}
 
@@ -172,6 +179,22 @@ public class UserController {
 	public ResponseEntity<List<User>> getAllUsersBySupervisor(@PathVariable long supervisorId) {
 
 		return new ResponseEntity<List<User>>(userService.getAllUsersBySupervisorId(supervisorId), HttpStatus.OK);
+	}
+
+	/**
+	 * Assigning given role to the user
+	 * @param role {@link Role}
+	 * @param userId user id which we wants to assign the given role
+	 */
+	@PostMapping("users/addRole/{userId}")
+	public void addUserToRole(@RequestBody Role role, @PathVariable Long userId) {
+		if (logger.isInfoEnabled())
+			logger.info("Add User id = " + userId + " to Role = " + role);
+		User user = userService.getUser(userId);
+		Role originalRole = roleService.getRole(role.getId());
+		if (originalRole != null && role != null) {
+			userRoleService.addUserRole(new UserRole(user, originalRole));
+		}
 	}
 
 	/**
