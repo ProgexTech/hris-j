@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.progex.hris.dto.RolePermissionDTO;
+
 /**
  * REST controller which handles all the permission related functionalities
  * related to each and every {@link Role} instance
@@ -66,6 +68,20 @@ public class RoleController {
 	}
 
 	/**
+	 * Returns all the available role data. If there are no records returns an empty
+	 * Set
+	 * 
+	 * @return {@link ResponseEntity<@link Set<@link Role>}
+	 */
+	@GetMapping("/roles")
+	public ResponseEntity<Set<Role>> getAll() {
+		Set<Role> roles = roleService.getAllRoles();
+		if (roles.isEmpty())
+			return new ResponseEntity<Set<Role>>(roles, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Set<Role>>(roles, HttpStatus.OK);
+	}
+
+	/**
 	 * Deletes Role with the given id from the database
 	 * 
 	 * @param id
@@ -93,30 +109,48 @@ public class RoleController {
 	}
 
 	/**
-	 * Adds permission to a given role
+	 * Adds permissions to the given role
 	 * 
-	 * @param permissions
-	 *            Set<{@link Permission}>
-	 * @param id
-	 *            Role id
+	 * @param {@link
+	 * 			RolePermissionDTO}
 	 */
-	@PostMapping("roles/addPermission/{id}")
-	public void addPermissionToRole(@RequestBody Set<Permission> permissions, @PathVariable Short id) {
+	@PostMapping("roles/addPermissions")
+	public void addPermissions(@RequestBody RolePermissionDTO rolePermissionDTO) {
 		if (logger.isInfoEnabled())
-			logger.info("Adding Permission = " + permissions + " to Role id = " + id);
-		Role role = roleService.getRole(id);
+			logger.info("Adding Permission to Role = " + rolePermissionDTO);
+		Role role = roleService.getRole(rolePermissionDTO.getRoleId());
 		if (role != null) {
-			for (Permission permission : permissions)
-				rolePermissionService.add(new RolePermission(role, permission));
+			for (Short permId : rolePermissionDTO.getPermissionIds()) {
+				Permission perm = permissionService.getPermissionById(permId);
+				if (perm != null) {
+					rolePermissionService.add(new RolePermission(role, perm));
+				}
+			}
 		}
 	}
 
-	// @DeleteMapping("roles/removePermission/{roleId}/{permId}")
-	// public void removePermissionFromRole(@PathVariable Short roleId,
-	// @PathVariable Short permId) {
-	// if(logger.isInfoEnabled())
-	// logger.info("Removing Permission ids = " + permId+" from Role id = "+roleId);
-	//
-	// rolePermissionService.delete(roleId, permId);
-	// }
+	/**
+	 * Removes permissions for the given role
+	 * 
+	 * @param {@link
+	 * 			RolePermissionDTO}
+	 */
+	@DeleteMapping("roles/removePermissions")
+	public void removePermissions(@RequestBody RolePermissionDTO rolePermissionDTO) {
+		if (logger.isInfoEnabled())
+			logger.info("Remove Permission from Role = " + rolePermissionDTO);
+		Short roleId = rolePermissionDTO.getRoleId();
+		Role role = roleService.getRole(roleId);
+		if (role != null) {
+			for (Short permId : rolePermissionDTO.getPermissionIds()) {
+				Permission perm = permissionService.getPermissionById(permId);
+				
+				if (perm != null) {
+					logger.info("Permission to be removed = " + perm);
+					logger.info("Role to be removed = " + role);
+					rolePermissionService.delete(roleId, permId);
+				}
+			}
+		}
+	}
 }

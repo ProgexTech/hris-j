@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
  * Permission related REST API functions are handled
  * 
@@ -29,13 +30,13 @@ public class PermissionController {
 
 	@Autowired
 	private PermissionService permissionService;
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(PermissionController.class);
 
 	/**
 	 * REST API function to add permissions
 	 * 
-	 * @param permission
+	 * @param permissionDto
 	 *            {@link Permission}
 	 * @return HTTP response {@link ResponseEntity}
 	 */
@@ -53,15 +54,14 @@ public class PermissionController {
 	 * @param id
 	 * @return HTTP response {@link ResponseEntity}
 	 */
-	@PutMapping("/permissions/{id}")
-	public ResponseEntity<Permission> updatePermission(@RequestBody Permission perm, @PathVariable short id) {
+	@PutMapping("/permissions")
+	public ResponseEntity<Permission> updatePermission(@RequestBody Permission perm) {
 		if (logger.isInfoEnabled())
 			logger.info("Permission to update " + perm);
-		Permission existtingPermission = permissionService.getPermissionById(id);
+		Permission existtingPermission = permissionService.getPermissionById(perm.getId());
 		if (existtingPermission == null) {
 			logger.warn("Given Permission is not available in the database ");
 		}
-		perm.setId(id);
 		return new ResponseEntity<Permission>(permissionService.updatePermission(perm), HttpStatus.OK);
 	}
 

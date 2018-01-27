@@ -1,10 +1,10 @@
 package com.progex.hris.user.authorization;
 
-import java.util.List;
+import java.util.Set;
 
 public interface RoleService {
 	
-	public List<Role> getAllRoles();
+	public Set<Role> getAllRoles();
 
 	public Role getRole(short id);
 

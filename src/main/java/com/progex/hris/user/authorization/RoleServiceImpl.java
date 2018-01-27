@@ -1,7 +1,7 @@
 package com.progex.hris.user.authorization;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,8 +20,8 @@ public class RoleServiceImpl implements RoleService{
 	private RoleRepository roleRepository;
 
 	@Override
-	public List<Role> getAllRoles() {
-		List<Role> roles = new ArrayList<Role>();
+	public Set<Role> getAllRoles() {
+		Set<Role> roles = new HashSet<Role>();
 		roleRepository.findAll().forEach(roles::add);
 		return roles;
 	}
