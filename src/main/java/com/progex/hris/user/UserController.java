@@ -1,8 +1,14 @@
 package com.progex.hris.user;
 
-import java.util.List;
-import org.slf4j.LoggerFactory;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeMap;
+import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.progex.hris.dto.UserDTO;
+import com.progex.hris.dto.UserDepartmentDTO;
 import com.progex.hris.organization.Department;
 import com.progex.hris.organization.DepartmentService;
+import com.progex.hris.organization.DesignationService;
 import com.progex.hris.user.authorization.Role;
 import com.progex.hris.user.authorization.RoleService;
 
@@ -47,6 +56,12 @@ public class UserController {
 	@Autowired
 	private RoleService roleService;
 
+	@Autowired
+	private DesignationService designationService;
+	
+	@Autowired
+	private ModelMapper modelMapper;
+
 	/**
 	 * Returns
 	 * <p>
@@ -56,15 +71,18 @@ public class UserController {
 	 * @return {@link ResponseEntity}
 	 */
 	@GetMapping("/users")
-	public ResponseEntity<List<User>> geAlltUsers() {
-		List<User> users = userService.getAllUsers();
+	public ResponseEntity<Set<UserDTO>> geAlltUsers() {
+		Set<User> users = userService.getAllUsers();
 		if (users.isEmpty()) {
-			return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Set<UserDTO>>(HttpStatus.NO_CONTENT);
 		}
 		if (logger.isInfoEnabled())
 			logger.info("Returning all the User´s");
-
-		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		
+		java.lang.reflect.Type targetListType = new TypeToken<Set<UserDTO>>() {}.getType();
+		Set<UserDTO> UserDTOs = new HashSet<>();
+		UserDTOs = modelMapper.map(users, targetListType);
+		return new ResponseEntity<Set<UserDTO>>(UserDTOs, HttpStatus.OK);
 	}
 
 	/**
@@ -75,20 +93,21 @@ public class UserController {
 	 * 
 	 * @return
 	 *         <p>
-	 *         Returns <tt>ResponseEntity<User> </tt> {@link ResponseEntity}
+	 *         Returns <tt>ResponseEntity<UserDTO> </tt> {@link ResponseEntity}
 	 *         </p>
 	 */
 	@GetMapping("/user/{id}")
-	public ResponseEntity<User> getUser(@PathVariable long id) {
+	public ResponseEntity<UserDTO> getUser(@PathVariable long id) {
 		if (logger.isInfoEnabled())
 			logger.info("User id to return " + id);
 
 		User user = userService.getUser(id);
 		if (user == null) {
 			logger.warn("User with the id " + id + " not found in the database");
-			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		UserDTO uDto = modelMapper.map(user, UserDTO.class);
+		return new ResponseEntity<UserDTO>(uDto, HttpStatus.OK);
 	}
 
 	/**
@@ -104,16 +123,14 @@ public class UserController {
 	 * 
 	 */
 	@PostMapping("/users")
-	public ResponseEntity<User> addUser(@RequestBody User user) {
+	public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDto) {
 		if (logger.isInfoEnabled())
-			logger.info("User to save " + user);
+			logger.info("User to save " + userDto);
+		User user = modelMapper.map(userDto, User.class);
+		User returnedUser = userService.addUser(user);
+		UserDTO uDto = modelMapper.map(returnedUser, UserDTO.class);
 
-		// Role existingRole = userService.getRole(user.getRole().getId());
-		// if (existingRole == null) {
-		// logger.warn("Invalid Role cannot proceed to save user id " + user.getId());
-		// return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-		// }
-		return new ResponseEntity<User>(userService.addUser(user), HttpStatus.CREATED);
+		return new ResponseEntity<UserDTO>(uDto, HttpStatus.CREATED);
 	}
 
 	/**
@@ -127,10 +144,10 @@ public class UserController {
 	 * 
 	 */
 	@PutMapping("/users/{id}")
-	public void updateUser(@RequestBody User user, @PathVariable long id) {
+	public void updateUser(@RequestBody UserDTO userDto, @PathVariable long id) {
 		if (logger.isInfoEnabled())
-			logger.info("User to update " + user);
-
+			logger.info("User to update " + userDto);
+		User user = modelMapper.map(userDto, User.class);
 		user.setId(id);
 		userService.updateUser(id, user);
 	}
@@ -146,10 +163,10 @@ public class UserController {
 	 * 
 	 */
 	@PatchMapping("/users/{id}")
-	public void patchUser(@RequestBody User user, @PathVariable long id) {
+	public void patchUser(@RequestBody UserDTO userDto, @PathVariable long id) {
 		if (logger.isInfoEnabled())
-			logger.info("User to partially update " + user);
-
+			logger.info("User to partially update " + userDto);
+		User user = modelMapper.map(userDto, User.class);
 		userService.patchUser(id, user);
 	}
 
@@ -176,15 +193,23 @@ public class UserController {
 	 * @return List<User>
 	 */
 	@GetMapping("users/bySupervisor/{supervisorId}")
-	public ResponseEntity<List<User>> getAllUsersBySupervisor(@PathVariable long supervisorId) {
-
-		return new ResponseEntity<List<User>>(userService.getAllUsersBySupervisorId(supervisorId), HttpStatus.OK);
+	public ResponseEntity<Set<UserDTO>> getAllUsersBySupervisor(@PathVariable long supervisorId) {
+		
+		Set<User> users = userService.getAllUsersBySupervisorId(supervisorId);
+		java.lang.reflect.Type targetListType = new TypeToken<Set<UserDTO>>() {}.getType();
+		Set<UserDTO> UserDTOs = new HashSet<>();
+		UserDTOs = modelMapper.map(users, targetListType);
+		
+		return new ResponseEntity<Set<UserDTO>>(UserDTOs, HttpStatus.OK);
 	}
 
 	/**
 	 * Assigning given role to the user
-	 * @param role {@link Role}
-	 * @param userId user id which we wants to assign the given role
+	 * 
+	 * @param role
+	 *            {@link Role}
+	 * @param userId
+	 *            user id which we wants to assign the given role
 	 */
 	@PostMapping("users/addRole/{userId}")
 	public void addUserToRole(@RequestBody Role role, @PathVariable Long userId) {
@@ -206,32 +231,32 @@ public class UserController {
 	 * 			Department}
 	 * @param joinedDate
 	 *            date
-	 * @return UserDepartment {@link UserDepartment}
+	 * @return UserDepartment {@link UserDepartmentDTO}
 	 */
 
-	@PostMapping("/userDepartments")
-	public ResponseEntity<UserDepartment> addUserToDepartment(@RequestBody UserDepartment userDepartment) {
+	@PostMapping("/users/addToDepartment")
+	public ResponseEntity<UserDepartmentDTO> addUserToDepartment(@RequestBody UserDepartmentDTO userDepartmentDto) {
 		if (logger.isInfoEnabled())
-			logger.info("UserDepartment to save " + userDepartment);
-		if (userDepartment.getUserDepartmentId() != null
-				&& userDepartment.getUserDepartmentId().getDepartmentId() != null) {
-			short departmentId = userDepartment.getUserDepartmentId().getDepartmentId();
-			Department department = departmentService.getDepartment(departmentId);
-			if (department != null) {
-				User user = userService.getUser(userDepartment.getUserDepartmentId().getUserId());
-				if (user != null) {
-					return new ResponseEntity<UserDepartment>(userDeprtmentService.addUserDepartment(userDepartment),
-							HttpStatus.CREATED);
-				} else {
-					logger.warn("No User found for id = " + userDepartment.getUserDepartmentId().getUserId());
-				}
-			} else {
-				logger.warn("No Department found for id = " + departmentId);
-			}
-		} else {
-			logger.warn("Invalid Department id received");
-			return new ResponseEntity<UserDepartment>(HttpStatus.BAD_REQUEST);
+			logger.info("UserDepartment to save " + userDepartmentDto);
+		
+		User user = userService.getUser(userDepartmentDto.getUserId());
+		if(user != null) {
+			logger.warn("Invalid User id recieved");
 		}
-		return new ResponseEntity<UserDepartment>(HttpStatus.BAD_REQUEST);
+		Department department = departmentService.getDepartment(userDepartmentDto.getDepartmentId());
+		if(department != null) {
+			logger.warn("Invalid Department id recieved");
+		}
+		UserDepartment userDepartment = new UserDepartment(new UserDepartmentId(userDepartmentDto.getDepartmentId(), 
+				userDepartmentDto.getUserId()), userDepartmentDto.getAssignedDate(), userDepartmentDto.getUnAssignedDate(), user, department);
+		UserDepartment savedUD = userDeprtmentService.addUserDepartment(userDepartment);
+		
+		UserDepartmentDTO tobeReturnedDto = new UserDepartmentDTO();
+		tobeReturnedDto.setAssignedDate(savedUD.getAssignedDate());
+		tobeReturnedDto.setDepartmentId(savedUD.getDepartment().getId());
+		tobeReturnedDto.setUnAssignedDate(savedUD.getUnAssignedDate());
+		tobeReturnedDto.setUserId(savedUD.getUser().getId());
+		
+		return new ResponseEntity<UserDepartmentDTO>(tobeReturnedDto, HttpStatus.OK);
 	}
 }

@@ -10,19 +10,22 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 import com.progex.hris.organization.Department;
 
 @Entity
-@Table(name="user_department")
-public class UserDepartment implements Serializable{
+@Table(name="user_department",
+uniqueConstraints=
+@UniqueConstraint(columnNames={"user_id", "department_id"}))
+public class UserDepartment{
 	
-	private static final long serialVersionUID = 6434208162205052392L;
-
 	@EmbeddedId
 	private UserDepartmentId userDepartmentId;
 		
 	@Temporal(TemporalType.DATE)
+	@NotNull
 	private Date assignedDate;
 	
 	@Temporal(TemporalType.DATE)
@@ -36,10 +39,12 @@ public class UserDepartment implements Serializable{
 	@MapsId("department_id")
 	private Department department;
 	
-	public UserDepartment(UserDepartmentId userDepartmentId, Date joinedDate, User user, Department department) {
+	public UserDepartment(UserDepartmentId userDepartmentId, Date assignedDate, Date unAssignedDate, User user,
+			Department department) {
 		super();
 		this.userDepartmentId = userDepartmentId;
-		this.assignedDate = joinedDate;
+		this.assignedDate = assignedDate;
+		this.unAssignedDate = unAssignedDate;
 		this.user = user;
 		this.department = department;
 	}
@@ -91,7 +96,7 @@ public class UserDepartment implements Serializable{
 	@Override
 	public String toString() {
 		return "UserDepartment [userDepartmentId=" + userDepartmentId + ", assignedDate=" + assignedDate
-				+ ", unAssignedDate=" + unAssignedDate + ", user=" + user + ", department=" + department + "]";
+				+ ", unAssignedDate=" + unAssignedDate +"]";
 	}
 
 	@Override

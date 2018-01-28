@@ -1,7 +1,7 @@
 package com.progex.hris.user;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
-	public List<User> getAllUsers() {
-		List<User> users = new ArrayList<User>();
+	public Set<User> getAllUsers() {
+		Set<User> users = new HashSet<User>();
 		userRepository.findAll().forEach(users::add);
 		return users;
 	}
@@ -101,9 +101,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getAllUsersBySupervisorId(long id) {
-		List<User> userList = new ArrayList<User>();
-		userRepository.findAllUsersBySupervisorId(id).forEach(userList::add);
-		return userList;
+	public Set<User> getAllUsersBySupervisorId(long id) {
+		Set<User> userSet = new HashSet<User>();
+		userRepository.findAllUsersBySupervisorId(id).forEach(userSet::add);
+		return userSet;
 	}
 }
