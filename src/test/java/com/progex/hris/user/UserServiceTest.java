@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.progex.hris.user.authorization.RoleRepository;
+import com.progex.hris.authorization.RoleRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserServiceTest {

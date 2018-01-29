@@ -1,4 +1,4 @@
-package com.progex.hris.user.authorization;
+package com.progex.hris.authorization;
 
 import java.util.Set;
 

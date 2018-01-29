@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.progex.hris.user.authorization.Role;
-import com.progex.hris.user.authorization.RoleRepository;
+import com.progex.hris.authorization.Role;
+import com.progex.hris.authorization.RoleRepository;
 
 /**
  * UserServiceImpl User related core functionalities will be handled in this class

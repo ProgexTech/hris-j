@@ -1,4 +1,4 @@
-package com.progex.hris.user;
+package com.progex.hris.organization;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

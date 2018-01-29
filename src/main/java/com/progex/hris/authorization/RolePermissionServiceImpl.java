@@ -1,4 +1,4 @@
-package com.progex.hris.user.authorization;
+package com.progex.hris.authorization;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

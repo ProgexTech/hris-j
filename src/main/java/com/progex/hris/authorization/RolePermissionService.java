@@ -1,6 +1,4 @@
-package com.progex.hris.user.authorization;
-
-import org.springframework.stereotype.Component;
+package com.progex.hris.authorization;
 
 public interface RolePermissionService {
 

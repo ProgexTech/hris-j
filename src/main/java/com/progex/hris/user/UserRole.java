@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.progex.hris.user.authorization.Role;
+import com.progex.hris.authorization.Role;
 
 @Entity
 @Table(name="user_role")

@@ -15,8 +15,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import com.progex.hris.authorization.Role;
 import com.progex.hris.organization.Department;
-import com.progex.hris.user.authorization.Role;
+import com.progex.hris.organization.Designation;
 
 @Entity
 @Table(name = "User")

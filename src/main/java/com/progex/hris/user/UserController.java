@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.modelmapper.TypeMap;
 import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.progex.hris.authorization.Role;
+import com.progex.hris.authorization.RoleService;
 import com.progex.hris.dto.UserDTO;
 import com.progex.hris.dto.UserDepartmentDTO;
 import com.progex.hris.organization.Department;
 import com.progex.hris.organization.DepartmentService;
 import com.progex.hris.organization.DesignationService;
-import com.progex.hris.user.authorization.Role;
-import com.progex.hris.user.authorization.RoleService;
 
 /**
  * UserController Rest Controller to manipulate user related stuff
@@ -182,7 +180,8 @@ public class UserController {
 	public void deleteUser(@PathVariable long id) {
 		if (logger.isInfoEnabled())
 			logger.info("Removing user id = " + id);
-
+		
+		userDeprtmentService.removeUserDepartmentForGivenUser(id);
 		userService.deleteUser(id);
 	}
 
