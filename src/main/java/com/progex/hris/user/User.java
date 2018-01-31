@@ -3,24 +3,21 @@ package com.progex.hris.user;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import com.progex.hris.user.authorization.Role;
+import com.progex.hris.authorization.Role;
+import com.progex.hris.organization.Department;
+import com.progex.hris.organization.Designation;
 
 @Entity
 @Table(name = "User")
@@ -48,8 +45,7 @@ public class User {
 	private String email;
 
 	private Long supervisorId;
-
-	@NotNull
+	
 	@Temporal(TemporalType.DATE)
 	private Date dob;
 
@@ -58,30 +54,24 @@ public class User {
 
 	@ManyToOne
 	private Role role;
+	
+	@NotNull
+	@ManyToOne
+	private Designation designation;
 
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "user_designation_history")
-	private Set<Designation> designation;
-
+	@NotNull
+	@ManyToOne
+	private Department department;
+	
 	@NotNull
 	@ElementCollection
 	@CollectionTable(name = "Contact")
 	private Set<ContactNumber> contacts;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, mappedBy = "user")
-	private Set<UserDepartment> userDepartment;
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
 	public Date getDob() {
 		return dob;
 	}
+
 
 	public void setDob(Date dob) {
 		this.dob = dob;
@@ -97,27 +87,6 @@ public class User {
 
 	public User() {
 
-	}
-
-	public User(long id, String userName, String password, String firstName, String lastName, String nic,
-			String address, String email, Long supervisorId, Date dob, Boolean active, Role role,
-			Set<Designation> designation, Set<ContactNumber> contacts, Set<UserDepartment> userDepartment) {
-		super();
-		this.id = id;
-		this.userName = userName;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.nic = nic;
-		this.address = address;
-		this.email = email;
-		this.supervisorId = supervisorId;
-		this.dob = dob;
-		this.active = active;
-		this.role = role;
-		this.designation = designation;
-		this.contacts = contacts;
-		this.userDepartment = userDepartment;
 	}
 
 	public String getUserName() {
@@ -176,13 +145,15 @@ public class User {
 		this.address = address;
 	}
 
-	public void setDesignation(Set<Designation> designation) {
+	public Designation getDesignation() {
+		return designation;
+	}
+
+
+	public void setDesignation(Designation designation) {
 		this.designation = designation;
 	}
 
-	public Set<Designation> getDesignation() {
-		return designation;
-	}
 
 	public Set<ContactNumber> getContacts() {
 		return contacts;
@@ -208,21 +179,31 @@ public class User {
 		this.supervisorId = supervisorId;
 	}
 
-	public Set<UserDepartment> getUserDepartment() {
-		return userDepartment;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setUserDepartment(Set<UserDepartment> department) {
-		this.userDepartment = department;
+	public void setRole(Role role) {
+		this.role = role;
 	}
+
+
+	public Department getDepartment() {
+		return department;
+	}
+
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", nic=" + nic + ", address=" + address + ", email=" + email
 				+ ", supervisorId=" + supervisorId + ", dob=" + dob + ", active=" + active + ", role=" + role
-				+ ", designation=" + designation + ", contacts=" + contacts + ", userDepartment=" + userDepartment
-				+ "]";
+				+ ", designation=" + designation + ", department=" + department + ", contacts=" + contacts + "]";
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.progex.hris.user;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface UserDepartmentRepository extends JpaRepository<UserDepartment, UserDepartmentId>{
-
+public interface UserDepartmentRepository extends CrudRepository<UserDepartment, UserDepartmentId>{
+	
+	public void deleteByUserDepartmentIdUserId(Long userId);
 }

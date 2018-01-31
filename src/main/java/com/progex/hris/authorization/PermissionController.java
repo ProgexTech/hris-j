@@ -1,8 +1,8 @@
-package com.progex.hris.user.authorization;
+package com.progex.hris.authorization;
 
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
  * Permission related REST API functions are handled
  * 
@@ -28,8 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class PermissionController {
 
 	@Autowired
-	private PermissionServiceImpl permissionService;
-
+	private PermissionService permissionService;
+	
 	private static final Logger logger = LoggerFactory.getLogger(PermissionController.class);
 
 	/**
@@ -52,7 +53,7 @@ public class PermissionController {
 	/**
 	 * REST API function to add permissions
 	 * 
-	 * @param permission
+	 * @param permissionDto
 	 *            {@link Permission}
 	 * @return HTTP response {@link ResponseEntity}
 	 */
@@ -70,15 +71,14 @@ public class PermissionController {
 	 * @param id
 	 * @return HTTP response {@link ResponseEntity}
 	 */
-	@PutMapping("/permissions/{id}")
-	public ResponseEntity<Permission> updatePermission(@RequestBody Permission perm, @PathVariable short id) {
+	@PutMapping("/permissions")
+	public ResponseEntity<Permission> updatePermission(@RequestBody Permission perm) {
 		if (logger.isInfoEnabled())
 			logger.info("Permission to update " + perm);
-		Permission existtingPermission = permissionService.getPermissionById(id);
+		Permission existtingPermission = permissionService.getPermissionById(perm.getId());
 		if (existtingPermission == null) {
 			logger.warn("Given Permission is not available in the database ");
 		}
-		perm.setId(id);
 		return new ResponseEntity<Permission>(permissionService.updatePermission(perm), HttpStatus.OK);
 	}
 
@@ -91,5 +91,18 @@ public class PermissionController {
 		if (logger.isInfoEnabled())
 			logger.info("Deleting the permission with the id = " + id);
 		permissionService.deletePermission(id);
+	}
+	
+	/**
+	 * Returns all the permissions
+	 * @param 
+	 * @return Set<Permission>
+	 */
+	@GetMapping("permissions")
+	public ResponseEntity<Set<Permission>> getAllPermissions() {
+		Set<Permission> permissions = permissionService.getAllPermissions();
+		if(permissions.isEmpty())
+			return new ResponseEntity<Set<Permission>>(permissions, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Set<Permission>>(permissions, HttpStatus.OK);
 	}
 }

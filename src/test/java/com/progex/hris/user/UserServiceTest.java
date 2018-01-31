@@ -1,28 +1,22 @@
 package com.progex.hris.user;
 
+import static org.junit.Assert.assertEquals;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Set;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.progex.hris.user.authorization.Role;
-import com.progex.hris.user.authorization.RoleRepository;
+import com.progex.hris.authorization.RoleRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserServiceTest {
@@ -55,7 +49,7 @@ public class UserServiceTest {
 //				new ArrayList<ContactNumber>()));
 //		when(userRepository.findAll()).thenReturn(userList);
 
-		List<User> result = userServiceImpl.getAllUsers();
+		Set<User> result = userServiceImpl.getAllUsers();
 		assertEquals(2, result.size());
 	}
 

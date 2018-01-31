@@ -1,7 +1,7 @@
-package com.progex.hris.user.authorization;
+package com.progex.hris.authorization;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,8 +33,8 @@ public class PermissionServiceImpl  implements PermissionService{
 	}
 
 	@Override
-	public List<Permission> getAllPermissions() {
-		List<Permission> permissions = new ArrayList<Permission>();
+	public Set<Permission> getAllPermissions() {
+		Set<Permission> permissions = new HashSet<Permission>();
 		permissionRepository.findAll().forEach(permissions::add);
 		return permissions;
 	}

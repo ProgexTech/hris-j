@@ -1,11 +1,11 @@
 package com.progex.hris.user;
 
-import java.util.List;
+import java.util.Set;
 
 
 public interface UserService {
 	
-	public List<User> getAllUsers();
+	public Set<User> getAllUsers();
 
 	public User getUser(long id);
 
@@ -17,5 +17,7 @@ public interface UserService {
 
 	public User getUserByUserName(String uName);
 	
-	public List<User> getAllUsersBySupervisorId(long id);
+	public Set<User> getAllUsersBySupervisorId(long id);
+
+	public void patchUser(long id, User user);
 }
