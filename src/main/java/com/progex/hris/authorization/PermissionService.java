@@ -3,8 +3,6 @@ package com.progex.hris.authorization;
 import java.util.Set;
 
 public interface PermissionService {
-	
-	public List<Permission> getAllPermissions();
 
 	public Permission addPermission(Permission perm);
 	

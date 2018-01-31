@@ -34,23 +34,6 @@ public class PermissionController {
 	private static final Logger logger = LoggerFactory.getLogger(PermissionController.class);
 
 	/**
-	 * REST API function to get all permissions
-	 * 
-	 * @return
-	 */
-	@GetMapping("/permissions")
-	public ResponseEntity<List<Permission>> getAllPermissions() {
-		List<Permission> permissions = permissionService.getAllPermissions();
-		if (permissions.isEmpty()) {
-			return new ResponseEntity<List<Permission>>(HttpStatus.NO_CONTENT);
-		}
-		if (logger.isInfoEnabled())
-			logger.info("Returning all the Permissions");
-
-		return new ResponseEntity<List<Permission>>(permissions, HttpStatus.OK);
-	}
-	
-	/**
 	 * REST API function to add permissions
 	 * 
 	 * @param permissionDto
