@@ -23,8 +23,8 @@ public class LeaveTypeService {
 		return leaveTypeRepository.findOne(code);
 	}
 	
-	public void addLeaveType(LeaveType leaveType) {
-		leaveTypeRepository.save(leaveType);
+	public LeaveType addLeaveType(LeaveType leaveType) {
+		return leaveTypeRepository.save(leaveType);
 	}
 	
 }

@@ -39,7 +39,7 @@ public class UserDTO {
 	@NotNull
 	private Boolean active;
 
-	@NotNull
+	//@NotNull
 	private Set<ContactNumber> contacts;
 
 	private Long supervisorId;

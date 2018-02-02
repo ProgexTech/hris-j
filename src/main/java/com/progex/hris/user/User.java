@@ -63,7 +63,7 @@ public class User {
 	@ManyToOne
 	private Department department;
 	
-	@NotNull
+	//@NotNull
 	@ElementCollection
 	@CollectionTable(name = "Contact")
 	private Set<ContactNumber> contacts;
