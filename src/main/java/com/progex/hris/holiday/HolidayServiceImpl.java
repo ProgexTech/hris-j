@@ -33,8 +33,8 @@ public class HolidayServiceImpl implements HolidayService {
 	}
 	
 	@Override
-	public void deleteHoliday(Date date) {
-		holidayRepository.delete(date);
+	public void deleteHoliday(long id) {
+		holidayRepository.delete(id);
 	}
 	
 	@Override

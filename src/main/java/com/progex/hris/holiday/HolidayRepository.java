@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface HolidayRepository extends CrudRepository<Holiday, Date> {
+public interface HolidayRepository extends CrudRepository<Holiday, Long> {
 	
 	public Iterable<Holiday> findAllHolidaysByOrderByCreatedDateAsc();
 	

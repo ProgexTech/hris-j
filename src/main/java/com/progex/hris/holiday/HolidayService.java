@@ -1,6 +1,5 @@
 package com.progex.hris.holiday;
 
-import java.util.Date;
 import java.util.Set;
 
 public interface HolidayService {
@@ -11,7 +10,7 @@ public interface HolidayService {
 	
 	public Holiday addHoliday(Holiday holiday);
 	
-	public void deleteHoliday(Date date);
+	public void deleteHoliday(long id);
 	
 	public Holiday updateHoliday(Holiday holiday);
 	
