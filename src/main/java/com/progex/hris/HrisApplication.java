@@ -12,6 +12,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EntityScan("com.progex.hris")
 public class HrisApplication {
 
+	// Set default time zone
+	/*@PostConstruct
+	void started() {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+	}*/
+
 	public static void main(String[] args) {
 		SpringApplication.run(HrisApplication.class, args);
 	}

@@ -23,7 +23,7 @@ public class WorkDayCategoryController {
 	private WorkDayCategoryService workDayCategoryService;
 	
 	@GetMapping("/workDayCategories")
-	public ResponseEntity<Set<WorkDayCategory>> geAlltUsers() {
+	public ResponseEntity<Set<WorkDayCategory>> getAllWorkDayCategories() {
 		Set<WorkDayCategory> workDayCategorySet = workDayCategoryService.getAllWorkDayCategories();
 		if (workDayCategorySet.isEmpty()) {
 			return new ResponseEntity<Set<WorkDayCategory>>(HttpStatus.NO_CONTENT);
@@ -35,7 +35,7 @@ public class WorkDayCategoryController {
 	}
 	
 	@PostMapping("/workDayCategories")
-	public ResponseEntity<WorkDayCategory> addUser(@RequestBody WorkDayCategory workDayCategory) {
+	public ResponseEntity<WorkDayCategory> addWorkDayCategory(@RequestBody WorkDayCategory workDayCategory) {
 		if (logger.isInfoEnabled())
 			logger.info("WorkDayCategory to save " + workDayCategory);
 		
